@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Spotify Song Name Extractor</title>
+    <style>
+        /* Your existing styles go here */
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>Spotify to Youtube Album Player</h1>
+        <h2>Get to watch music videos of your favorite tracks by just copying their links here</h2>
+        <label for="spotifyLink">Enter Spotify Album Link:</label>
+        <input type="text" id="spotifyLink" placeholder="Paste Spotify Link">
+        <button onclick="extractSongName()">Extract Song Name</button>
+        <div id="result"></div>
+        <p id="loading" style="display:none;">Loading...</p>
+        <p id="randomPhrase"></p>
+    </div>
+
+    <script>
+        function extractSongName() {
+            var spotifyLink = document.getElementById('spotifyLink').value;
+            var loadingIndicator = document.getElementById('loading');
+            var randomPhraseContainer = document.getElementById('randomPhrase');
+            
+            loadingIndicator.style.display = 'block';
+
+            // Phrases array
+            var phrases = [
+                "Nice taste in tunes! Let's keep the groove going on YouTube!",
+                "Excellent pick! Off to YouTube for an extended playlist experience!",
+                "Good call on the music! YouTube awaits to amplify the vibes!",
+                "You've got a knack for great music! Redirecting you to YouTube for more.",
+                "Fantastic song choice! Ready to dive into YouTube for the ultimate music journey?",
+                "Solid selection! Next stop: YouTube, where the beats never end!",
+                "Awesome track! Buckle up for a YouTube ride filled with more musical delights!",
+                "Well-chosen! Time to transition to YouTube and keep the rhythm alive!",
+                "Brilliant taste in music! Heading over to YouTube for an extended jam session!",
+                "Spot-on choice! YouTube's the place to be for a seamless musical journey!"
+            ];
+
+            var randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+            randomPhraseContainer.innerText = randomPhrase;
+
+            fetch(`/extract?spotify_link=${encodeURIComponent(spotifyLink)}`)
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById('result').innerText = result.result || result.error;
+                    console.log(randomPhrase);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerText = 'An error occurred. Please try again.';
+                })
+                .finally(() => {
+                    loadingIndicator.style.display = 'none';
+                    document.getElementById('spotifyLink').value = ''; // Clear input after extraction
+                });
+        }
+    </script>
+</body>
+</html>
