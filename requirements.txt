@@ -1,0 +1,9 @@
+
+Flask-Lambda
+Flask
+Werkzeug
+spotipy
+google-api-python-client
+google-auth-oauthlib
+google-auth
+requests
